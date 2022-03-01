@@ -1,0 +1,1 @@
+<img src="admin/css/backgraounds/bg-2.jpg" alt="" srcset="">
