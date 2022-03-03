@@ -64,7 +64,7 @@
                                                     <td>
                                                         <a href="{{ route('admin.detail.campaign', ['id' => $item->id]) }}" class="primary edit mr-1"><i class="fas fa-eye"></i></a>
                                                         <a href="{{ route('admin.edit.campaign', ['id' => $item->id]) }}" class="primary edit mr-1"><i class="fa fa-pencil"></i></a>
-                                                        <a href="{{ route('admin.delete.campaign', ['id' => $item->id]) }}" onclick="return confirm('Are you sure to delete ?')" class="danger delete mr-1"><i class="fa fa-trash-o"></i></a>
+                                                        <a href="{{ route('admin.delete.campaign', ['id' => $item->id]) }}" onclick="return confirm('Are you sure to delete ?')" class="danger mr-1"><i class="fa fa-trash-o"></i></a>
                                                     </td>
                                                 </tr>
                                                 @empty
@@ -82,5 +82,4 @@
         </div>
     </div>
 </div>
-<!-- END: Content-->
 @endsection

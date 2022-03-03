@@ -13,7 +13,7 @@
                             <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">
-                                        <img src="admin/css/images/logo/stack-logo-dark.png" alt="branding logo" style="background: linear-gradient(rgb(255 255 255 / 50%), rgb(0 0 0 / 50%));">
+                                        <img src="{{ asset('admin/mailsender-logo.png') }}" alt="branding logo" style="width:50%">
                                     </div>
 
                                 </div>

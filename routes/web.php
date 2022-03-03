@@ -22,7 +22,7 @@ Route::get('/testing/{type}', function($type){
 });
 
 Route::get('/', function () {
-     return redirect()->route('admin.login');
+    return redirect()->route('admin.login');
 });
 
 Route::group(['middleware' => ['XSS']], function () {

@@ -4,27 +4,6 @@
 <div class="app-content content">
    <div class="content-overlay"></div>
    <div class="content-wrapper">
-      <div class="content-header row">
-         <div class="content-header-left col-md-6 col-12 mb-2">
-            <div class="row breadcrumbs-top">
-               <div class="breadcrumb-wrapper col-12">
-                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="{{ route('admin.read.campaigns')}}">Campaign</a>
-                     </li>
-                     &nbsp;
-                     <li class="breadcrumb-item"><a href="{{ url()->previous() }}">Contacts</a>
-                     </li>
-                     <li class="breadcrumb-item"><a href="{{ url()->current() }}?year={{request('year')}}">List Contacts</a>
-                     </li>
-                  </ol>
-               </div>
-            </div>
-            <div class="d-none">
-               <h3 class="content-header-title mb-0">Upload CSV</h3>
-               
-            </div>
-         </div>
-      </div>
    </div>
    <div class="col-12">
    <div class="card">
