@@ -8,27 +8,6 @@
         <div class="content-detached content-right">
             <div class="content-body">
                 <div class="content-overlay"></div>
-                <!-- <section class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="bug-list-search">
-                                    <div class="bug-list-search-content">
-                                        <div class="sidebar-toggle d-block d-lg-none"><i class="feather icon-menu font-large-1"></i></div>
-                                        <form action="#">
-                                            <div class="position-relative">
-                                                <input type="search" id="search-contacts" class="form-control" placeholder="Search contacts..." />
-                                                <div class="form-control-position">
-                                                    <i class="fa fa-search text-size-base text-muted la-rotate-270"></i>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section> -->
                 @if(session()->has('success'))
                 <div class="alert alert-success">
                     {{ session()->get('success') }}
@@ -41,13 +20,13 @@
                                 <div class="card-header">
                                     <div class="content-header row">
                                         <div class="content-header-left col-md-6 col-12">
-                                            <h4 class="card-title">All Campaign</h4>
+                                            <h4 class="card-title">All Campaigns</h4>
                                         </div>
                                         <div class="content-header-right col-md-6 col-12">
                                             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                                             
                                                     <div>
-                                                      <button type="button"  class="btn btn-success" onclick="window.location='{{ url("create-campaign-view") }}'" >Add Campaign</button>
+                                                      <button type="button"  class="btn btn-success" onclick="window.location='{{ route("admin.create.campaign") }}'" >Add Campaign</button>
                                                        
                                                     </div>
 
@@ -70,26 +49,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $i=1; ?>
-                                                @foreach ($Campaigns as $item)
+
+                                                @forelse ($Campaigns as $key => $item)
                                                 <tr>
-                                                    <td>{{$i}}</td>
+                                                    <td>{{++$key}}</td>
                                                     <td>
                                                         <div class="media">
                                                             <div class="media-body media-middle">
-                                                                <a class="media-heading name" href="/campaingn-detail/{{$item->id}}">{{$item->name}}</a>
+                                                                <a class="media-heading name" href="{{ route('admin.detail.campaign', ['id' => $item->id]) }}">{{$item->name}}</a>
                                                             </div>
                                                         </div>
                                                     </td>
                                         
                                                     <td>
-                                                        <a href="/importView/{{$item->id}}" class="primary edit mr-1"><i class="fas fa-eye"></i></a>
-                                                        <a href="/campaingn-detail/{{$item->id}}" class="primary edit mr-1"><i class="fa fa-pencil"></i></a>
-                                                        <a href=" /campaingn-delete/{{$item->id}}" onclick="return confirm('Are you sure to delete ?')" class="danger delete mr-1"><i class="fa fa-trash-o"></i></a>
+                                                        <a href="{{ route('admin.detail.campaign', ['id' => $item->id]) }}" class="primary edit mr-1"><i class="fas fa-eye"></i></a>
+                                                        <a href="{{ route('admin.edit.campaign', ['id' => $item->id]) }}" class="primary edit mr-1"><i class="fa fa-pencil"></i></a>
+                                                        <a href="{{ route('admin.delete.campaign', ['id' => $item->id]) }}" onclick="return confirm('Are you sure to delete ?')" class="danger delete mr-1"><i class="fa fa-trash-o"></i></a>
                                                     </td>
                                                 </tr>
-                                                <?php $i++; ?>
-                                                @endforeach
+                                                @empty
+                                                    <tr><td colspan="3">No Record Found.</td></tr>
+                                                @endforelse
                                             </tbody>
                                         </table>
                                     </div>

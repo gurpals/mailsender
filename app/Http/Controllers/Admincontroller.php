@@ -15,7 +15,6 @@ class Admincontroller extends Controller
         return view('Admin.login');
     }
     public function login(Request $request){
-
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -23,46 +22,61 @@ class Admincontroller extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/getCampaingn');
+            return redirect()->intended('/dashboard');
         }
         else{
-         return redirect()->back()->with('error', 'credentials doesnot match!');
+            return redirect()->back()->with('error', 'Your credentials doesnot match with our records.');
         }
     }
 
     public function logout(){
-            Auth::logout();
-            return redirect('/admin-login');
+        Auth::logout();
+        return redirect('/login');
     }
 
 /*Campaingn*/
 
 
     public function importView(Request $request,$id){
-        $contacts= Contacts::where('campaign_id',$id)->orderBy('id', 'DESC')->get();
-        $totalContactsCount= Contacts::where('campaign_id',$id)->count();
-        $totalEmailSend= Contacts::where('campaign_id',$id)->where('is_email_sent','sent')->count();
-        $totalEmailPending= Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->count();
-       return view('Admin.importCsv',compact('contacts','totalContactsCount','totalEmailSend','totalEmailPending'));
+        $resolveClass = resolve(Contacts::class);
+        $campaign_name = $resolveClass->getCampaignName($id);
+        $contacts = $resolveClass->getContactsUsingID($id);
+        $totalSentEmails = $resolveClass->getCountOfSentEmailContacts($id,'campaign');
+        $totalPendingEmails = $resolveClass->getCountOfPendingEmailContacts($id,'campaign');
+        //return $contacts;
+        $unityArray = array();
+        $i =0;
+        foreach($contacts as $key => $contact){
+            $unityArray['sent'.$i] = $resolveClass->getUnityCountSentEachUpload($id,$contact,'Sent');
+            $unityArray['pending'.$i] = $resolveClass->getUnityCountPendingEachUpload($id,$contact,'pending');
+            $i++;
+        }
+        //return $unityArray;
+        return view('Admin.importCsv', compact('unityArray','campaign_name', 'contacts','totalSentEmails','totalPendingEmails'));
     }
     
-
+    public function getResolvedCampaigns(){
+        return resolve(Campaigns::class)->getDescRecords();
+    }
+    public function ContactDetailAccordingDate(Request $request){
+        $resolveClass = resolve(Contacts::class);
+        $campaign_name = $resolveClass->getCampaignName($request->campaign);
+        $contacts = $resolveClass->getContactsCreatedAt($request->year,$request->campaign);
+        return view('Admin.contacts-list', compact('campaign_name', 'contacts'));
+    }
     public function createCampaingn(Request $request){
         $this->Validate($request, [
             'name' => 'required|max:45|min:2'
-     
         ]);
         $data = $request->all();
-        $input=Campaigns::create($data);
-             $Campaigns= Campaigns::orderBy('id', 'DESC')->get();
-            return view('Admin.campaign_list',['Campaigns' => $Campaigns]);
+        $input = Campaigns::create($data);
+        //$Campaigns = $this->getResolvedCampaigns();
+        return redirect()->route('admin.read.campaigns');
     }
-  
+
     public function getCampaingn(Request $request){
-
-        $Campaigns= Campaigns::orderBy('id', 'DESC')->get();
-
-        return view('Admin.campaign_list',compact('Campaigns'));
+        $Campaigns = $this->getResolvedCampaigns();
+        return view('Admin.campaign_list', compact('Campaigns'));
     }
 
     public function updateCampaingn(Request $request){
@@ -70,133 +84,93 @@ class Admincontroller extends Controller
             'name' => 'required|max:45|min:2'
         ]);
         $data = Campaigns::where('id',$request->campaign_id)->update(['name'=>$request->name]);
-        if($data){
-             $Campaigns= Campaigns::orderBy('id', 'DESC')->get();
-            return view('Admin.campaign_list',compact('Campaigns'));
-        }else{
-            return redirect()->back()->with('msg','Data not found ! ');
-        }
+        return redirect()->route('admin.read.campaigns');
     }
 
     public function CampaingnDetail($id){
-        $data = Campaigns::find($id);
-        if($data){
-
-            return view('Admin.edit-campaingn',compact('data'));
-        }else{
-            return redirect()->back()->with('msg','Data not found ! ');
-        }
+        $data = Campaigns::where('id',$id)->first();
+        return view('Admin.edit-campaingn', compact('data'));
     }
 
     public function deleteCampaingn($id){
-            Campaigns::find($id)->delete();
-            $Campaigns= Campaigns::orderBy('id', 'DESC')->get();
-            return view('Admin.campaign_list', ['success' => 'Campaign deleted successfully','Campaigns'=>$Campaigns]);
+        Campaigns::find($id)->delete();
+        return back();
     }
 
-
-/*contacts*/
-
     public function getContacts(){
-
-        $contacts= Contacts::orderBy('id', 'DESC')->get();
-
+        $contacts = $this->getResolvedCampaigns();
         return view('Admin.app-contacts',compact('contacts'));
     }
     
     public function importContacts(Request $request){
         $this->Validate($request, [
             'uploaded_file' => 'required|max:2097152|mimes:csv'
-     
         ]);
 
         $data=[];
-        $file = $request->file('uploaded_file');
-        if ($file) {
+        if ($request->hasfile('uploaded_file')) {   
+            $file = $request->file('uploaded_file');
             $filename = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
-            $tempPath = $file->getRealPath();
-            $fileSize = $file->getSize(); //Get size of uploaded file in bytes
-            //Check for file extension and size
-            $this->checkUploadedFileProperties($extension, $fileSize);
-            //Where uploaded file will be stored on the server 
-            $location = 'uploads'; //Created an "uploads" folder for that
-            // Upload file
-            $file->move($location, $filename);
-            // In case the uploaded file path is to be stored in the database 
+            $location = 'uploads';
+            $file->move($location, $filename); 
             $filepath = public_path($location . "/" . $filename);
-            // Reading file
             $file = fopen($filepath, "r");
-            $importData_arr = array(); // Read through the file and store the contents as an array
-
+            $importData_arr = array();
             $i = 0;
-        //Read the contents of the uploaded file 
-        while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
-            $num = count($filedata);
-            // Skip first row (Remove below comment if you want to skip the first row)
-            if ($i == 0) {
-            $i++;
-            continue;
+            while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                $num = count($filedata);
+                // Skip first row (Remove below comment if you want to skip the first row)
+                if ($i == 0) {
+                $i++;
+                continue;
+                }
+                for ($c = 0; $c < $num; $c++) {
+                $importData_arr[$i][] = $filedata[$c];
+               
+                }
+                $i++;
             }
-            for ($c = 0; $c < $num; $c++) {
-            $importData_arr[$i][] = $filedata[$c];
-           
-            }
-            $i++;
-        }
-        fclose($file); //Close after reading
-        $j = 0;
-        foreach ($importData_arr as $importData) {
+            fclose($file);
+            foreach ($importData_arr as $importData) {
                 $data = Contacts::create([
-                'campaign_id'                 => $request->campaign_id,
-                'domain'                      =>$importData[0], 
-                'email'                       =>$importData[1],
-                'name'                        =>$importData[2],
-                'organization'                =>$importData[3],
-                'street'                      =>$importData[4],
-                'city'                        =>$importData[5],
-                'state'                      =>$importData[6],
-                'postal_code'                =>$importData[7],
-                'country'                    =>$importData[8],
-                'telephone'                  =>$importData[9],
+                    'campaign_id'                 => $request->campaign_id,
+                    'domain'                      => $importData[0], 
+                    'email'                       => $importData[1],
+                    'name'                        => $importData[2],
+                    'organization'                => $importData[3],
+                    'street'                      => $importData[4],
+                    'city'                        => $importData[5],
+                    'state'                       => $importData[6],
+                    'postal_code'                 => $importData[7],
+                    'country'                     => $importData[8],
+                    'telephone'                   => $importData[9]
                 ]);
-                $send_mail = $importData[1];
-                $name      = $importData[2];
-                $id        = $request->campaign_id;
-                dispatch(new SendEmailJob($send_mail,$name,$id));
-                Contacts::where('email',$importData[1])->where('campaign_id',$request->campaign_id)->update(['is_email_sent'=>'sent']);   
             }
-
-         $contacts= Contacts::where('campaign_id',$request->campaign_id)->orderBy('id', 'DESC')->get();
-
-         return redirect()->back()->with(['success'=>'Data added sucessfully !','contacts'=>$contacts]);
+            return redirect()->back()->with(['success'=>'CSV Uploaded Successfully!']);
         }
       
     }
- 
-    public function checkUploadedFileProperties($extension, $fileSize){
-        $valid_extension = array("csv", "xlsx"); //Only want csv and excel files
-        $maxFileSize = 2097152; // Uploaded file size limit is 2mb
-            if (in_array(strtolower($extension), $valid_extension)) {
-                if ($fileSize <= $maxFileSize) {
-                }else{
-                    return redirect()->back()->with('error','No file was uploaded');
-                }
-            }else{
-                 return redirect()->back()->with('error','Invalid file extension');
-               
-            }
-    } 
 
-
-     public function resentEmail($id){
-        $contacts=Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get('email');
-        foreach ($contacts as $value) {
-            $send_mail = $value;
-                dispatch(new SendEmailJob($send_mail));
+    public function SendAllEmailsInQueue($id){
+        $allContacts = Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get();
+        if(!count($allContacts)){
+            return back()->with('qerror','You do not have any pending records. Please Upload CSV First');
         }
-         $contacts= Contacts::where('campaign_id',$id)->orderBy('id', 'DESC')->get();
-        return redirect()->back()->with(['success'=>'email sent sucessfully !','contacts'=>$contacts]);
-
-     }
+        foreach($allContacts as $single_contact){
+            //$array = ['name' => $single_contact->name, 'email' => $single_contact->email];
+            SendEmailJob::dispatch($single_contact);
+        }
+        return back();
+    }
+    
+    // public function SendAllPendingEmailsInQueue($id){
+    //     $contacts = Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get('name','email');
+    //     if(count($contacts) > 0){
+    //         foreach($contacts as $single_contact){
+    //             //$array = ['name' => $single_contact->name, 'email' => $single_contact->email];
+    //             SendEmailJob::dispatch($single_contact);
+    //         }
+    //     }
+    //     return back();
+    // }
 }

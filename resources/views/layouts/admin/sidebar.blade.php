@@ -2,10 +2,7 @@
     <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-               <!-- 
-                <li><a href="{{url('/home')}}"><i class="feather icon-users"></i><span class="menu-title" data-i18n="Contacts">Contacts</span></a>
-                </li> -->
-                <li><a href="{{ url('getCampaingn')}}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Account Setting">Campaigns</span></a>
+                <li><a href="{{ route('admin.read.campaigns')}}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Account Setting">Campaigns</span></a>
                 </li>
             </ul>
         </div>

@@ -13,12 +13,12 @@
                      </li> -->
                      <li class="breadcrumb-item"><a href="{{url('home')}}">Contacts</a>
                      </li>
-                     <li class="breadcrumb-item active"><a href="{{url('getCampaingn')}}">Campaingns</a>
+                     <li class="breadcrumb-item active"><a href="{{ route('admin.read.campaigns') }}">Campaigns</a>
                      </li>
                   </ol>
                </div>
             </div>
-            <h3 class="content-header-title mb-0">Create Campaingn</h3>
+            <h3 class="content-header-title mb-0">Create Campaigns</h3>
          </div>
       </div>
       <div class="content-body">
@@ -28,7 +28,7 @@
                   <ul class="nav nav-pills flex-column mt-md-0 mt-1">
                      <li class="nav-item">
                         <a class="nav-link d-flex" id="account-pill-password" data-toggle="pill" href="#account-vertical-password" aria-expanded="false">
-                        <i class="feather icon-lock"></i> Create  Campaingn
+                        <i class="feather icon-lock"></i> Create  Campaign
                         </a>
                      </li>
                   </ul>
@@ -39,7 +39,7 @@
                         <div class="card-body">
                            <div class="tab-content">
                               <div class="tab-pane fade active show " id="account-vertical-password" role="tabpanel" aria-labelledby="account-pill-password" aria-expanded="false">
-                                 <form method="POST" action="{{ url('createCampaingn') }}">
+                                 <form method="POST" action="{{ route('admin.create.post.campaign') }}">
                                     @csrf
                                     @if(session('message'))
                                     <div class="alert alert-success">{{session('message')}}</div>
@@ -48,9 +48,9 @@
                                        <div class="col-12">
                                           <div class="form-group">
                                              <div class="controls">
-                                                <label for="account-old-password">Campaingn</label>
+                                                <label for="account-old-password">Campaign</label>
                                                 <input type="text" class="form-control"
-                                                   name="name"id="account-old-password" required placeholder="Campaingn Name" data-validation-required-message="This field is required">
+                                                   name="name"id="account-old-password" required placeholder="Campaingn Name" maxlength="45" data-validation-required-message="This field is required">
                                                 <span class="text-danger">
                                                 @error('name')
                                                 {{$message}}

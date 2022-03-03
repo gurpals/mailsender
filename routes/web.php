@@ -16,39 +16,36 @@ use App\Jobs\SendEmailJob;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/testing/{type}', function($type){
+    echo "<pre>";
+    print_r(\DB::table($type)->get()->toArray());
+});
 
 Route::get('/', function () {
-     return view('Admin.login');
- });
+     return redirect()->route('admin.login');
+});
 
 Route::group(['middleware' => ['XSS']], function () {
+        Route::name('admin.')->controller(Admincontroller::class)->group(function () {
+            Route::get('/login', 'adminLogin')->name('login')->middleware('guest');
+            Route::post('/ad-login', 'login');
+            Route::group(['middleware' => ['auth']], function () {
+                Route::get('/dashboard', 'getCampaingn')->name('read.campaigns');
+                Route::post('/createCampaingn', 'createCampaingn')->name('create.post.campaign');
+                Route::get('/campaingn-detail/{id}', 'CampaingnDetail')->name('edit.campaign');
+                Route::post('/update-Campaingn', 'updateCampaingn')->name('update.campaign');
+                Route::get('/campaingn-delete/{id}', 'deleteCampaingn')->name('delete.campaign');
+                Route::get('/create-campaign-view', function () {
+                    return view('Admin.campaign');
+                })->name('create.campaign');
 
-    Route::GET('/admin-login', [Admincontroller::class, 'adminLogin'])->name('login')->middleware('guest');
-    Route::POST('/ad-login', [Admincontroller::class, 'login']);
-    Route::group(['middleware' => ['auth']], function () {
-            Route::GET('/home', [Admincontroller::class, 'getContacts'])->middleware('auth');
-            Route::POST('/contact', [Admincontroller::class, 'createContacts']);
-            Route::get('/resent-email/{id}', [Admincontroller::class, 'resentEmail']);
-           
-           
-               /*campaings*/
-
-            Route::POST('/createCampaingn', [Admincontroller::class, 'createCampaingn']);
-            Route::GET('/campaingn-detail/{id}', [Admincontroller::class, 'CampaingnDetail'])->middleware('auth');
-             Route::POST('/update-Campaingn', [Admincontroller::class, 'updateCampaingn']);
-          
-            Route::GET('/campaingn-delete/{id}', [Admincontroller::class, 'deleteCampaingn']);
-            Route::GET('/create-campaign-view', function () {
-             return view('Admin.campaign');
+                Route::get('/schedule-queue-on-emails/{id}', 'SendAllEmailsInQueue')->name('schedule.emails');
+                Route::post('/contact', 'createContacts')->name('create.contacts');
+                Route::get('/schedule-queue-for-pendings-email/{id}', 'SendAllPendingEmailsInQueue')->name('reschedule.emails');
+                Route::get('/contact-detail', 'ContactDetailAccordingDate')->name('contact.detail');
+                Route::get('/importView/{id}', 'importView')->name('detail.campaign');
+                Route::post('/import-contacts', 'importContacts')->name('import.contacts');
+                Route::get('/logout','logout');
             });
-
-            Route::GET('/getCampaingn', [Admincontroller::class, 'getCampaingn']);
-            Route::GET('/importView/{id}', [Admincontroller::class, 'importView']);
-            Route::POST('/import-contacts', [Admincontroller::class, 'importContacts']);
-            //Route::POST('/account-setting', [Admincontroller::class, 'accountSetting'])->middleware('auth');
-
-            
-            Route::get('/logout',[Admincontroller::class,'logout']);
         });
-
 });

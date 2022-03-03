@@ -24,29 +24,13 @@
       <div class="content-body">
          <section id="page-account-settings">
             <div class="row">
-               <div class="col-md-3 mb-2 mb-md-0">
-                  <ul class="nav nav-pills flex-column mt-md-0 mt-1">
-                     <li class="nav-item">
-                        <a class="nav-link d-flex" id="account-pill-password" data-toggle="pill" href="#" aria-expanded="false">
-                        <i class="fa fa-pencil"></i> Edit  Campaingn
-                        </a>
-                        <a class="nav-link d-flex" id="account-pill-password" data-toggle="pill" onclick='imp({{Request::segment(2)}})' aria-expanded="false">
-                        <i class="fa fa-file"></i> import  CSV
-                        </a>
-                        <a class="nav-link d-flex" id="account-pill-password" data-toggle="pill" onclick="window.location='{{ url("create-campaign-view")}}'" aria-expanded="false">
-                        <i class="fa fa-plus"></i> Add A New Campaign
-                        </a>
-                     </li>
-                  </ul>
-               </div>
-
                <div class="col-md-9">
                   <div class="card">
                      <div class="card-content">
                         <div class="card-body">
                            <div class="tab-content">
                               <div class="tab-pane fade active show " id="account-vertical-password" role="tabpanel" aria-labelledby="account-pill-password" aria-expanded="false">
-                                 <form method="POST" enctype="multipart/form-data" action="{{ url('update-Campaingn') }}">
+                                 <form method="POST" enctype="multipart/form-data" action="{{ route('admin.update.campaign') }}">
                                     @csrf
                                     @if(session('message'))
                                     <div class="alert alert-success">{{session('message')}}</div>
@@ -57,9 +41,8 @@
                                              <div class="controls">
                                                 <label for="account-old-password">Campaign</label>
                                                 <input type="text" class="form-control"
-                                                   name="name"id="account-old-password" value="{{$data->name}}" required placeholder="Campaingn Name" data-validation-required-message="This field is required">
-                                                    <input type="hidden" id="custId" name="campaign_id" value="{{Request::segment(2)}}">
-
+                                                   name="name"id="account-old-password" value="{{$data->name}}" required placeholder="Campaingn Name" maxlength="45" data-validation-required-message="This field is required">
+                                                    <input type="hidden" id="custId" name="campaign_id" value="{{ request('id') }}">
                                                 <span class="text-danger">
                                                 @error('name')
                                                 {{$message}}
