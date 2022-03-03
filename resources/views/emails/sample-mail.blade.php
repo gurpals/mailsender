@@ -1,11 +1,7 @@
 @component('mail::message')
 Hello
 
-
-
 Hope you are doing well!
-
-
 
 Your account is created with us. You can claim your company by clicking here.
 

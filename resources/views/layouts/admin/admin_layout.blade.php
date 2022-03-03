@@ -4,10 +4,10 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=e  dge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="ActiveExperts">
-    <meta name="keywords" content="ActiveExperts">
-    <meta name="author" content="ActiveExperts">
-    <title>Contacts - Active Experts</title>
+    <meta name="description" content="MailSender">
+    <meta name="keywords" content="MailSender">
+    <meta name="author" content="MailSender">
+    <title>Contacts - MailSender</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
       <!-- images -->
