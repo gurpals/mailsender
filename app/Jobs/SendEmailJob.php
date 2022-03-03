@@ -38,10 +38,9 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-       $name = $this->send_mail['name'];
-       $email = $this->send_mail['email'];
-        $template = new CompanyAcountCreated();             
-        Mail::to($email,$name)->send($template);
+        $email = $this->send_mail['email'];
+        $template = new CompanyAcountCreated($this->send_mail);             
+        Mail::to($email)->send($template);
         $this->send_mail->update(['is_email_sent'=>'Sent']);
                 
     }

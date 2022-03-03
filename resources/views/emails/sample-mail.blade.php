@@ -1,5 +1,5 @@
 @component('mail::message')
-Hello
+Hello, {{ $contact->name }}
 
 Hope you are doing well!
 
