@@ -11,20 +11,7 @@
                <h3 class="content-header-title mb-0">Upload CSV</h3>
             </div>
          </div>
-         <div class="content-header-right col-md-6 col-12">
-            <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-
-               <div class="btn-group mb-1" role="group">
-                  <a href="{{ route('admin.schedule.emails', ['id' => request('id')]) }}"
-                     class="btn btn-xs btn-info pull-right">Send All Email's in Queue</a>&nbsp;
-               </div>
-
-               <div class="btn-group mb-1" role="group">
-                  <a href="{{ route('admin.schedule.emails', ['id' => request('id')])}}"
-                     class="btn btn-xs btn-warning pull-right">Resend Pending Email's</a>
-               </div><br>
-            </div>
-         </div>
+         
       </div>
       <div class="content-body">
          <section id="page-account-settings">

@@ -39,9 +39,9 @@ Route::group(['middleware' => ['XSS']], function () {
                     return view('Admin.campaign');
                 })->name('create.campaign');
 
-                Route::get('/schedule-queue-on-emails/{id}', 'SendAllEmailsInQueue')->name('schedule.emails');
+                Route::get('/schedule-queue-on-emails/{id}/{year}', 'SendAllEmailsInQueue')->name('schedule.emails');
                 Route::post('/contact', 'createContacts')->name('create.contacts');
-                Route::get('/schedule-queue-for-pendings-email/{id}', 'SendAllPendingEmailsInQueue')->name('reschedule.emails');
+                //Route::get('/schedule-queue-for-pendings-email/{id}/{year}', 'SendAllPendingEmailsInQueue')->name('reschedule.emails');
                 Route::get('/contact-detail', 'ContactDetailAccordingDate')->name('contact.detail');
                 Route::get('/importView/{id}', 'importView')->name('detail.campaign');
                 Route::post('/import-contacts', 'importContacts')->name('import.contacts');
