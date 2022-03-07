@@ -1,15 +1,12 @@
 @component('mail::message')
-Hello, {{ $contact->name }}
+Hello {{ $contact->name }},
 
-Hope you are doing well!
+Congratulations for purchasing {{ $contact->domain }} domain.
 
-Your account is created with us. You can claim your company by clicking here.
+I am from WIS support team. I can help you to build your website/app.
 
-@component('mail::button', ['url' => ''])
-Click Here!
-@endcomponent
+Please feel free to contact me. I will guide you further for the same.
 
 Thanks & Regards,
-Negls Team
-
+Kindu
 @endcomponent

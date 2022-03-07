@@ -32,10 +32,7 @@
                                 <div class="avatar avatar-online"><img src="{{ asset('admin/mailsender-logo.png') }}" alt="avatar"><i></i></div><span class="user-name">Admin</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                               
-
-                                    <a class="dropdown-item" href="/logout"><i class="feather icon-power"></i> Logout</a>
-
+                                <a class="dropdown-item" href="/logout"><i class="feather icon-power"></i> Logout</a>
                             </div>
                         </li>
                     </ul>

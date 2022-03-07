@@ -1,19 +1,21 @@
-    <!-- BEGIN: Main Menu-->
-    <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
-        <div class="main-menu-content">
-            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                <li><a href="{{ route('admin.read.campaigns')}}"><i class="feather icon-lock"></i><span class="menu-title" data-i18n="Account Setting">Campaigns</span></a>
-                </li>
-            </ul>
-        </div>
+<!-- BEGIN: Main Menu-->
+<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="main-menu-content">
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li><a href="{{ route('admin.read.campaigns')}}"><i class="feather icon-lock"></i><span
+                        class="menu-title" data-i18n="Account Setting">Campaigns</span></a>
+            </li>
+        </ul>
     </div>
-    <!-- END: Main Menu-->
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+</div>
+<!-- END: Main Menu-->
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script>
-    $(function(){
-        $('a').each(function(){
+    $(function () {
+        $('a').each(function () {
             if ($(this).prop('href') == window.location.href) {
-                $(this).addClass('active'); $(this).parents('li').addClass('active');
+                $(this).addClass('active');
+                $(this).parents('li').addClass('active');
             }
         });
     });
