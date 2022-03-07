@@ -10,7 +10,7 @@ use Auth;
 use App\Jobs\SendEmailJob;
 class Admincontroller extends Controller
 {
-/*auth*/
+    /*auth*/
     public function adminLogin(){
         return view('Admin.login');
     }
@@ -34,9 +34,7 @@ class Admincontroller extends Controller
         return redirect('/login');
     }
 
-/*Campaingn*/
-
-
+    /*Campaingn*/
     public function importView(Request $request,$id){
         $resolveClass = resolve(Contacts::class);
         $campaign_name = $resolveClass->getCampaignName($id);
@@ -148,7 +146,6 @@ class Admincontroller extends Controller
             }
             return redirect()->back()->with(['success'=>'CSV Uploaded Successfully!']);
         }
-      
     }
 
     public function SendAllEmailsInQueue($id,$year){
