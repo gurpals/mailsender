@@ -30,6 +30,6 @@ class CompanyAcountCreated extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.sample-mail')->with(['contact' => $this->contact]);
+        return $this->subject('Company Account Created '. $this->contact['domain'])->markdown('emails.sample-mail')->with(['contact' => $this->contact]);
     }
 }
