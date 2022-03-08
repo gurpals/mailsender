@@ -1,13 +1,11 @@
 @component('mail::message')
 Hello {{ $contact->name }},
 
-Congratulations for purchasing {{ $contact->domain }} domain!
+Welcome to Negls!
 
-I am from WIS support team. I can help you to build your website/app.
+This is the testing {{ $contact->domain }} domain!
 
-Please feel free to contact me. I will guide you further for the same.
 
 Thanks & Regards,
-
-Kindu!
+Negls
 @endcomponent
