@@ -3,9 +3,11 @@ Hello {{ $contact->name }},
 
 Congratulations for purchasing {{ $contact->domain }} domain!
 
-I am from WIS support team. I can help you to build your website/app.
+I am from Wisdom InfoSoft a web development compnay. I can help you to build your website/app.
 
-Please feel free to contact me. I will guide you further for the same.
+I have suggestions and sample as per your industry that can help you out.
+
+Please feel free to contact me.
 
 Thanks & Regards,
 
