@@ -10,7 +10,7 @@ use Auth;
 use App\Jobs\SendEmailJob;
 class Admincontroller extends Controller
 {
-/*auth*/
+    /*auth*/
     public function adminLogin(){
         return view('Admin.login');
     }
@@ -34,9 +34,7 @@ class Admincontroller extends Controller
         return redirect('/login');
     }
 
-/*Campaingn*/
-
-
+    /*Campaingn*/
     public function importView(Request $request,$id){
         $resolveClass = resolve(Contacts::class);
         $campaign_name = $resolveClass->getCampaignName($id);
@@ -117,7 +115,7 @@ class Admincontroller extends Controller
             $file = fopen($filepath, "r");
             $importData_arr = array();
             $i = 0;
-            while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+            while (($filedata = fgetcsv($file)) !== FALSE) {
                 $num = count($filedata);
                 // Skip first row (Remove below comment if you want to skip the first row)
                 if ($i == 0) {
@@ -134,9 +132,9 @@ class Admincontroller extends Controller
             foreach ($importData_arr as $importData) {
                 $data = Contacts::create([
                     'campaign_id'                 => $request->campaign_id,
-                    'domain'                      => $importData[0], 
-                    'email'                       => $importData[1],
-                    'name'                        => $importData[2],
+                    'domain'                      => ( strpos($importData[0], ";") !== false )?substr  ($importData[0], 0, strpos($importData[0], ";")):$importData[0], 
+                    'email'                       => ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1],
+                    'name'                        => empty($importData[2]) ? 'Sir/Madam' : $importData[2],
                     'organization'                => $importData[3],
                     'street'                      => $importData[4],
                     'city'                        => $importData[5],
@@ -148,11 +146,10 @@ class Admincontroller extends Controller
             }
             return redirect()->back()->with(['success'=>'CSV Uploaded Successfully!']);
         }
-      
     }
 
-    public function SendAllEmailsInQueue($id){
-        $allContacts = Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get()->unique('email');
+    public function SendAllEmailsInQueue($id,$year){
+        $allContacts = Contacts::where('campaign_id',$id)->where('created_at',$year)->where('is_email_sent','pending')->get()->unique();
         if(!count($allContacts)){
             return back()->with('qerror','You do not have any pending records. Please Upload CSV First');
         }

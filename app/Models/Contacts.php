@@ -28,7 +28,7 @@ class Contacts extends Model
     ];
 
     public function getContactsCreatedAt($year,$id){
-      return $this->where('campaign_id',$id)->where('created_at',$year)->get();
+      return $this->where('campaign_id',$id)->where('created_at',$year)->orderByDesc('id')->get();
     }
     public function getContactsUsingID($id){
       return $this->where('campaign_id',$id)->orderByDesc('id')->pluck('created_at')->unique();

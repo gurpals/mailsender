@@ -44,5 +44,8 @@ class SendEmailJob implements ShouldQueue
         $this->send_mail->update(['is_email_sent'=>'Sent']);
                 
     }
+    public function failed(\Exception $e){
+        $this->send_mail->update(['is_email_sent'=>'pending']);
+    }
    
 }
