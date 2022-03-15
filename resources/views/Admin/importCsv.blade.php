@@ -23,12 +23,14 @@
                            <div class="tab-content">
                               <div class="tab-pane fade active show " id="account-vertical-password" role="tabpanel"
                                  aria-labelledby="account-pill-password" aria-expanded="false">
+                                 @if(session('success'))
+                                    <div class="alert alert-success">{{session('success')}}</div>
+                                 @elseif(session('error'))
+                                    <div class="alert alert-danger">{{session('error')}}</div>
+                                 @endif
                                  <form method="POST" action="{{ route('admin.import.contacts') }}"
                                     enctype="multipart/form-data">
                                     @csrf
-                                    @if(session('success'))
-                                    <div class="alert alert-success">{{session('success')}}</div>
-                                    @endif
                                     <div class="row">
                                        <div class="col-6">
                                           <div class="form-group">
