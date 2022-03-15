@@ -129,8 +129,17 @@ class Admincontroller extends Controller
                 $i++;
             }
             fclose($file);
+            $z = 0;
+            $k = 0;
             foreach ($importData_arr as $importData) {
-                $data = Contacts::create([
+                $emal  = ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1];
+                $checkEmail = Contacts::where('email',$emal)->first();
+                if($checkEmail){
+                    $k++;
+                }
+                $data = Contacts::firstOrCreate(
+                    ['email' => $emal],
+                    [
                     'campaign_id'                 => $request->campaign_id,
                     'domain'                      => ( strpos($importData[0], ";") !== false )?substr  ($importData[0], 0, strpos($importData[0], ";")):$importData[0], 
                     'email'                       => ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1],
@@ -141,10 +150,17 @@ class Admincontroller extends Controller
                     'state'                       => $importData[6],
                     'postal_code'                 => $importData[7],
                     'country'                     => $importData[8],
-                    'telephone'                   => $importData[9]
+                    'telephone'                   => $importData[9],
+                    'z'                           => $z++
                 ]);
             }
-            return redirect()->back()->with(['success'=>'CSV Uploaded Successfully!']);
+            $declareArray = [];
+            if($z == $k){
+                $declareArray['error'] = 'Please Upload Different CSV.';
+            }else{
+                $declareArray['success'] = 'CSV Uploaded Successfully!';
+            }
+            return redirect()->back()->with($declareArray);
         }
     }
 
