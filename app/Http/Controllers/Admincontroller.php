@@ -152,7 +152,7 @@ class Admincontroller extends Controller
     }
 
     public function SendAllEmailsInQueue($id){
-        $allContacts = Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get();
+        $allContacts = Contacts::where('campaign_id',$id)->where('is_email_sent','pending')->get()->unique('email');
         if(!count($allContacts)){
             return back()->with('qerror','You do not have any pending records. Please Upload CSV First');
         }
