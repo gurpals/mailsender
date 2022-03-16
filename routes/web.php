@@ -16,7 +16,7 @@ use App\Jobs\SendEmailJob;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/testing/{type}/{rowsCount}', function($type,$rowsCount){
+Route::get('/testing/{type}/{rowsCount}', function($type,$rowsCount = 10){
     echo "<pre>";
     print_r(\DB::table($type)->get($rowsCount)->toArray());
 });
