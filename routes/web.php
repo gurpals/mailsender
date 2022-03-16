@@ -25,9 +25,9 @@ Route::get('/', function () {
     return redirect()->route('admin.login');
 });
 
-Route::get('/getPHPINFO', function () {
-    phpinfo();
-});
+// Route::get('/getPHPINFO', function () {
+//     phpinfo();
+// });
 
 Route::group(['middleware' => ['XSS']], function () {
         Route::name('admin.')->controller(Admincontroller::class)->group(function () {
