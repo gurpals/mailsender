@@ -18,7 +18,7 @@ use App\Jobs\SendEmailJob;
 */
 Route::get('/testing/{type}/{rowsCount}', function($type,$rowsCount = 10){
     echo "<pre>";
-    print_r(\DB::table($type)->get($rowsCount)->toArray());
+    print_r(\DB::table($type)->take($rowsCount)->get()->toArray());
 });
 
 Route::get('/', function () {
