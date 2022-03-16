@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Campaigns;
 use Auth;
 use App\Jobs\SendEmailJob;
+use App\Jobs\CreateContact;
+
 class Admincontroller extends Controller
 {
     /*auth*/
@@ -101,13 +103,9 @@ class Admincontroller extends Controller
     }
     
     public function importContacts(Request $request){
-        ini_set('memory_limit', -1);
-        ini_set('max_execution_time', -1);
         $this->Validate($request, [
             'uploaded_file' => 'required|mimes:csv'
         ]);
-
-        $data=[];
         if ($request->hasfile('uploaded_file')) {   
             $file = $request->file('uploaded_file');
             $filename = $file->getClientOriginalName();
@@ -131,38 +129,14 @@ class Admincontroller extends Controller
                 $i++;
             }
             fclose($file);
-            $z = 0;
-            $k = 0;
             foreach ($importData_arr as $importData) {
-                $emal  = ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1];
-                $checkEmail = Contacts::where('email',$emal)->first();
-                if($checkEmail){
-                    $k++;
+                $emal  = ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1];               
+                $getEmal = Contacts::where('email',$emal)->first();
+                if(empty($getEmal)){
+                    CreateContact::dispatch($importData,$request->campaign_id);
                 }
-                $data = Contacts::firstOrCreate(
-                    ['email' => $emal],
-                    [
-                    'campaign_id'                 => $request->campaign_id,
-                    'domain'                      => ( strpos($importData[0], ";") !== false )?substr  ($importData[0], 0, strpos($importData[0], ";")):$importData[0], 
-                    'email'                       => ( strpos($importData[0], ";") !== false )?substr($importData[0], strpos($importData[0], ";")+1):$importData[1],
-                    'name'                        => empty($importData[2]) ? 'Sir/Madam' : $importData[2],
-                    'organization'                => $importData[3],
-                    'street'                      => $importData[4],
-                    'city'                        => $importData[5],
-                    'state'                       => $importData[6],
-                    'postal_code'                 => $importData[7],
-                    'country'                     => $importData[8],
-                    'telephone'                   => $importData[9],
-                    'z'                           => $z++
-                ]);
             }
-            $declareArray = [];
-            if($z == $k){
-                $declareArray['error'] = 'Please Upload Different CSV.';
-            }else{
-                $declareArray['success'] = 'CSV Uploaded Successfully!';
-            }
-            return redirect()->back()->with($declareArray);
+            return redirect()->back()->with('success','All contacts creating under queue, please refresh the page to get the records.');
         }
     }
 

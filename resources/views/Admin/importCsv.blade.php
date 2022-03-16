@@ -25,8 +25,8 @@
                                  aria-labelledby="account-pill-password" aria-expanded="false">
                                  @if(session('success'))
                                     <div class="alert alert-success">{{session('success')}}</div>
-                                 @elseif(session('error'))
-                                    <div class="alert alert-danger">{{session('error')}}</div>
+                                 {{--@elseif(session('error'))
+                                    <div class="alert alert-danger">{{session('error')}}</div>--}}
                                  @endif
                                  <form method="POST" action="{{ route('admin.import.contacts') }}"
                                     enctype="multipart/form-data">
