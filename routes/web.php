@@ -25,9 +25,10 @@ Route::get('/', function () {
     return redirect()->route('admin.login');
 });
 
-// Route::get('/getPHPINFO', function () {
-//     phpinfo();
-// });
+Route::get('/testmanager', function () {
+    echo "<h1>Contacts Count ".Contacts::count()."</h1><br>";
+    phpinfo();
+});
 
 Route::group(['middleware' => ['XSS']], function () {
         Route::name('admin.')->controller(Admincontroller::class)->group(function () {
