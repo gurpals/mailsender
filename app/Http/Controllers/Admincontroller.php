@@ -102,7 +102,7 @@ class Admincontroller extends Controller
     
     public function importContacts(Request $request){
         $this->Validate($request, [
-            'uploaded_file' => 'required|max:2097152|mimes:csv'
+            'uploaded_file' => 'required|mimes:csv'
         ]);
 
         $data=[];
