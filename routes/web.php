@@ -27,7 +27,7 @@ Route::get('/', function () {
 
 Route::get('/testmanager', function () {
     echo "<h1>Contacts Count ".Contacts::count()."</h1><br>";
-    phpinfo();
+    //phpinfo();
 });
 
 Route::group(['middleware' => ['XSS']], function () {
