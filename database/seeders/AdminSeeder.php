@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
     {
         User::create([
             'name'=>'Admin',
-            'password'=>Hash::make('gurpal11#@!'), 
+            'password'=>Hash::make('welcome2wis$'), 
             'email'=>'kindu@wisdominfosoft.com',
             'email_verified_at'=> Carbon::now(),
             'status'=>1,
