@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admincontroller;
 use Illuminate\Support\Facades\Http;
 use App\Jobs\SendEmailJob;
-
+use App\Models\Contacts;
 
 /*
 |--------------------------------------------------------------------------
