@@ -1,5 +1,10 @@
 @extends('layouts.admin.admin_layout')
 @section('content')
+<style>
+   .pagination{
+      justify-content:center;
+   }
+</style>
 <!-- BEGIN: Content-->
 <div class="app-content content">
    <div class="content-overlay"></div>
@@ -45,7 +50,7 @@
          <div class="card-content">
             <div class="card-body">
                <div class="table-responsive">
-                  <table id="users-contacts"
+                  <table id=""
                      class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                      <thead>
                         <tr>
@@ -87,6 +92,7 @@
                   </table>
                </div>
             </div>
+            {{$contacts->links()}}
          </div>
       </div>
    </div>
