@@ -61,7 +61,7 @@ class Admincontroller extends Controller
     public function ContactDetailAccordingDate(Request $request){
         $resolveClass = resolve(Contacts::class);
         $campaign_name = $resolveClass->getCampaignName($request->campaign);
-        $contacts = $resolveClass->getContactsCreatedAt($request->year,$request->campaign);
+        $contacts = $resolveClass->getContactsCreatedAt($request->year,$request->campaign,$request->search);
         return view('Admin.contacts-list', compact('campaign_name', 'contacts'));
     }
     public function createCampaingn(Request $request){

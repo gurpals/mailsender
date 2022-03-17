@@ -27,8 +27,12 @@ class Contacts extends Model
         'telephone' 
     ];
 
-    public function getContactsCreatedAt($year,$id){
-      return $this->where('campaign_id',$id)->where('created_at',$year)->orderByDesc('id')->get();
+    public function getContactsCreatedAt($year,$id,$search){
+      return $this->where('campaign_id',$id)->where('created_at',$year)->where(function($query) use ($search){
+        if($search){
+          $query->where('name','ilike','%'.$search.'%')->orWhere('email','ilike','%'.$search.'%')->orWhere('is_email_sent','ilike','%'.$search.'%');
+        }
+      })->orderByDesc('id')->paginate(50)->withQueryString();
     }
     public function getContactsUsingID($id){
       return $this->where('campaign_id',$id)->orderByDesc('id')->pluck('created_at')->unique();
@@ -47,11 +51,11 @@ class Contacts extends Model
       return $this->hasOne(Campaigns::class, 'id', 'campaign_id');
     }
     public function getCampaignName($id,$param = null){   
-      $query = $this->where('campaign_id',$id);
-      $count = $query->with('RelationCampaignContacts')->count();
-      if($count > 0){
-        return $query->with('RelationCampaignContacts')->first()->RelationCampaignContacts;
-      }
+      // $query = $this->where('campaign_id',$id);
+      // $count = $query->with('RelationCampaignContacts')->count();
+      // if($count > 0){
+      //   return $query->with('RelationCampaignContacts')->first()->RelationCampaignContacts;
+      // }
       return Campaigns::where('id',$id)->first();
     }
     public function getUnityCountSentEachUpload($id,$date,$type){

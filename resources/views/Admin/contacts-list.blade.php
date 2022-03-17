@@ -26,6 +26,18 @@
                               class="btn btn-xs btn-warning pull-right">Resend Pending Email's</a>
                         </div><br>
                      </div>
+                     <form action="{{url()->current()}}" class=" col-md-10 float-right p-0">
+                        <div class="input-group">
+                           <input type="search"  class="form-control" name="search" value="{{request('search')}}" placeholder="Search name,email,status">
+                           <input type="hidden"  class="form-control" name="campaign" value="{{request('campaign')}}">
+                           <input type="hidden"  class="form-control" name="year" value="{{request('year')}}">
+                           <div class="input-group-append">
+                             <button class="btn btn-secondary" type="submit">
+                               <i class="fa fa-search"></i>
+                             </button>
+                           </div>
+                         </div>                    
+                     </form> 
                   </div>
                </div>
             </div>
